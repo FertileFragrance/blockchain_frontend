@@ -103,7 +103,6 @@ export default {
         if (valid) {
           loginReq(this.userForm.username, this.userForm.password).then((res) => {
             this.$parent.$data.showName = true
-            console.log(res)
             if (res.data.isSuccess) {
               globalDefault.user.username = res.data.data.username
               globalDefault.user.password = res.data.data.password

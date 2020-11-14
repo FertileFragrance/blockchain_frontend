@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/login/bitcoin.jpg" alt="">
+<!--    <img src="./assets/login/bitcoin.jpg" alt="">-->
     <router-view/>
   </div>
 </template>
