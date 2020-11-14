@@ -7,20 +7,20 @@
       <el-form ref="userForm" :model="userForm" :rules="rule" @keyup.native.enter="login('userForm')">
         <div class="lgD">
           <el-form-item prop="username">
-            <img src="../../assets/login/login.png" width="20" height="20" alt="" />
-            <input type="text" v-model="userForm.username" placeholder="输入用户名" />
+            <img src="../../assets/login/login.png" width="20" height="20" alt=""/>
+            <input type="text" v-model="userForm.username" placeholder="输入用户名"/>
           </el-form-item>
         </div>
         <div class="lgD">
           <el-form-item prop="password">
-            <img src="../../assets/login/password.png" width="20" height="20" alt="" />
-            <input type="password" v-model="userForm.password" placeholder="输入用户密码" />
+            <img src="../../assets/login/password.png" width="20" height="20" alt=""/>
+            <input type="password" v-model="userForm.password" placeholder="输入用户密码"/>
           </el-form-item>
         </div>
         <div class="lgD">
           <el-form-item prop="verifyCode">
-            <img src="../../assets/login/verify.png" width="20" height="20" alt="" />
-            <input type="text" v-model="userForm.verifyCode" placeholder="输入验证码" />
+            <img src="../../assets/login/verify.png" width="20" height="20" alt=""/>
+            <input type="text" v-model="userForm.verifyCode" placeholder="输入验证码"/>
           </el-form-item>
         </div>
       </el-form>
@@ -28,7 +28,9 @@
         <v-verify ref="verify"/>
       </div>
       <div class="logC">
-        <a><el-button @click="login('userForm')" >登 录</el-button></a>
+        <a>
+          <el-button @click="login('userForm')">登 录</el-button>
+        </a>
       </div>
       <p class="register" @click="gotoRegister">没有账号？立即注册</p>
     </div>
@@ -37,8 +39,9 @@
 
 <script>
 import globalDefault from '../../Global'
-import { loginReq } from '../../api/user'
+import {loginReq} from '../../api/user'
 import verify from './verify'
+
 export default {
   data () {
     const checkVerifyCode = (rule, value, callback) => {
@@ -98,8 +101,8 @@ export default {
     login (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$parent.$data.showName = true
           loginReq(this.userForm.username, this.userForm.password).then((res) => {
+            this.$parent.$data.showName = true
             console.log(res)
             if (res.data.isSuccess) {
               globalDefault.user.username = res.data.data.username
@@ -124,70 +127,80 @@ export default {
 </script>
 
 <style>
-  * {
-    margin: 0 auto;
-    padding: 0;
-  }
-  #wrap1 {
-    height: 600px;
-    width: 100%;
-    background-position: center center;
-    position: relative;
-    display: flex;
-    justify-content: center;
-  }
-  #wrap1 .logGet {
-    height: 478px;
-    width: 368px;
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.6);
-    top: 50px;
-  }
-  .logC a button {
-    width: 100%;
-    height: 45px;
-    background-color: #5cadff;
-    border: none;
-    color: white;
-    font-size: 18px;
-  }
-  .logGet .logD.logDtip .p1 {
-    display: inline-block;
-    font-size: 28px;
-    margin-top: 30px;
-    width: 86%;
-  }
-  #wrap1 .logGet .logD.logDtip {
-    width: 86%;
-    border-bottom: 1px solid #5cadff;
-    margin: 0 auto 60px;
-  }
-  .logGet .lgD img {
-    position: absolute;
-    top: 12px;
-    left: 8px;
-  }
-  .logGet .lgD input {
-    width: 100%;
-    height: 42px;
-    text-indent: 2.5rem;
-  }
-  #wrap1 .logGet .lgD {
-    width: 86%;
-    position: relative;
-    margin: 30px auto;
-  }
-  #wrap1 .logGet .logC {
-    width: 86%;
-    margin: 0 auto;
-  }
-  .register {
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 22px;
-    color: #1ab2ff;
-    cursor: pointer;
-    text-align: center;
-    text-indent: 8px;
-  }
+* {
+  margin: 0 auto;
+  padding: 0;
+}
+
+#wrap1 {
+  height: 600px;
+  width: 100%;
+  background-position: center center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+#wrap1 .logGet {
+  height: 478px;
+  width: 368px;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.6);
+  top: 50px;
+}
+
+.logC a button {
+  width: 100%;
+  height: 45px;
+  background-color: #5cadff;
+  border: none;
+  color: white;
+  font-size: 18px;
+}
+
+.logGet .logD.logDtip .p1 {
+  display: inline-block;
+  font-size: 28px;
+  margin-top: 30px;
+  width: 86%;
+}
+
+#wrap1 .logGet .logD.logDtip {
+  width: 86%;
+  border-bottom: 1px solid #5cadff;
+  margin: 0 auto 60px;
+}
+
+.logGet .lgD img {
+  position: absolute;
+  top: 12px;
+  left: 8px;
+}
+
+.logGet .lgD input {
+  width: 100%;
+  height: 42px;
+  text-indent: 2.5rem;
+}
+
+#wrap1 .logGet .lgD {
+  width: 86%;
+  position: relative;
+  margin: 30px auto;
+}
+
+#wrap1 .logGet .logC {
+  width: 86%;
+  margin: 0 auto;
+}
+
+.register {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #1ab2ff;
+  cursor: pointer;
+  text-align: center;
+  text-indent: 8px;
+}
 </style>
