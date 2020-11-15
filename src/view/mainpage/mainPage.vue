@@ -19,35 +19,34 @@
       <el-dialog title="提示" :visible.sync="dialogMineVisible" width="30%" :before-close="handleClose">
         <span>挖矿中...请稍候</span>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogMineVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogMineVisible = false">确 定</el-button>
-  </span>
+          <el-button @click="dialogMineVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogMineVisible = false">确 定</el-button>
+        </span>
       </el-dialog>
       <el-dialog title="提示" :visible.sync="dialogMineFinishedVisible" width="30%" :before-close="handleClose">
         <span>新挖到的区块是：XXX</span>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogMineFinishedVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogMineFinishedVisible = false">确 定</el-button>
-  </span>
+          <el-button @click="dialogMineFinishedVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogMineFinishedVisible = false">确 定</el-button>
+        </span>
       </el-dialog>
       <br>
       <el-button type="primary" round @click="addKeys(); dialogAddKeysVisible = true">增加密钥对</el-button>
       <el-dialog title="提示" :visible.sync="dialogAddKeysVisible" width="30%" :before-close="handleClose">
         <span>增加的公钥是：{{ newPublicKey }}</span>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogAddKeysVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogAddKeysVisible = false">确 定</el-button>
-  </span>
+          <el-button @click="dialogAddKeysVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogAddKeysVisible = false">确 定</el-button>
+        </span>
       </el-dialog>
       <br>
       <el-button type="primary" round @click="queryBalance">查询余额</el-button>
-      <br>
       <el-dialog title="提示" :visible.sync="dialogQueryBalanceVisible" width="30%" :before-close="handleClose">
         <span>你的账户余额为{{ balance }}比特币</span>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogQueryBalanceVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogQueryBalanceVisible = false">确 定</el-button>
-  </span>
+          <el-button @click="dialogQueryBalanceVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogQueryBalanceVisible = false">确 定</el-button>
+        </span>
       </el-dialog>
       <br>
       <el-button type="danger" round @click="logout">退出登录</el-button>
