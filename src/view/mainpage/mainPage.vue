@@ -40,7 +40,7 @@
         </span>
       </el-dialog>
       <br>
-      <el-button type="primary" round @click="queryBalance">查询余额</el-button>
+      <el-button type="primary" round @click="queryBalance(); dialogQueryBalanceVisible = true">查询余额</el-button>
       <el-dialog title="提示" :visible.sync="dialogQueryBalanceVisible" width="30%" :before-close="handleClose">
         <span>你的账户余额为{{ balance }}比特币</span>
         <span slot="footer" class="dialog-footer">
