@@ -19,3 +19,13 @@ export function addKeysReq (username) {
     username: username
   })
 }
+
+export function queryAllUsersReq () {
+  return request.get('/queryAllUsers')
+}
+
+export function queryBalanceReq (username) {
+  return request.get('/queryBalance', {
+    username: username
+  })
+}
