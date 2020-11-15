@@ -29,3 +29,9 @@ export function queryBalanceReq (username) {
     username: username
   })
 }
+
+export function mineReq (username) {
+  return request.post('/mine', {
+    username: username
+  })
+}
