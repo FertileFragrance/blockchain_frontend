@@ -25,13 +25,19 @@ export function queryAllUsersReq () {
 }
 
 export function queryBalanceReq (username) {
-  return request.get('/queryBalance', {
-    username: username
-  })
+  return request.get('/queryBalance' + '?' + 'username=' + username)
 }
 
 export function mineReq (username) {
   return request.post('/mine', {
     username: username
+  })
+}
+
+export function transferAccountReq (senderName, recipients, moneys) {
+  return request.post('/transferAccount', {
+    senderName: senderName,
+    recipients: recipients,
+    moneys: moneys
   })
 }
