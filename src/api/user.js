@@ -31,13 +31,13 @@ export function queryBalanceReq (username) {
 export function mineReq (username) {
   return request.post('/mine', {
     username: username
-  })
+  }, {timeout: 1000 * 60 * 60 * 24 * 365})
 }
 
-export function transferAccountReq (senderName, recipients, moneys) {
+export function transferAccountReq (senderName, recipientNames, moneys) {
   return request.post('/transferAccount', {
     senderName: senderName,
-    recipients: recipients,
+    recipientNames: recipientNames,
     moneys: moneys
   })
 }

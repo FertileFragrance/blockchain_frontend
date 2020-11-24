@@ -21,7 +21,7 @@
       <br>
       <el-button type="primary" round @click="dialogSetDefaultAddressVisible = true">设置默认地址</el-button>
       <br>
-      <el-button type="primary" round @click="dialogQueryBalanceVisible = true">查询余额</el-button>
+      <el-button type="primary" round @click="queryBalance(); dialogQueryBalanceVisible = true">查询余额</el-button>
       <br>
       <el-button type="primary" round @click="dialogTransferAccountVisible = true">给其他用户转账</el-button>
       <br>
@@ -170,16 +170,13 @@ export default {
     },
     queryBalance () {
       queryBalanceReq(this.currentUser.username).then((res) => {
-        // TODO
-        // this.balance = res.data.data.balance
+        this.balance = res.data.data
       })
     },
     mine () {
       mineReq(this.currentUser.username).then((res) => {
         this.dialogMineVisible = false
         this.dialogMineFinishedVisible = true
-        console.log(res.data.data)
-        // TODO
         this.newBlockNonce = res.data.data
       })
     },
@@ -218,13 +215,14 @@ export default {
             }
             sum += moneys[i]
           }
-          if (sum < this.balance) {
+          if (sum > this.balance) {
             this.$Message.error('余额不足')
             return
           }
           transferAccountReq(this.currentUser.username, recipientNames, moneys).then((res) => {
             // TODO
             console.log(res)
+            this.queryBalance()
             this.resetForm(name)
             this.dialogTransferAccountVisible = false
             this.$Message.success('转账成功')
