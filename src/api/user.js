@@ -41,3 +41,10 @@ export function transferAccountReq (senderName, recipients, moneys) {
     moneys: moneys
   })
 }
+
+export function setDefaultAddressReq (username, indexNumber) {
+  return request.post('/setDefaultAddress', {
+    username: username,
+    indexNumber: indexNumber
+  })
+}

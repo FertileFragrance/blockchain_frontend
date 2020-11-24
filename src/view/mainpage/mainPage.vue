@@ -16,6 +16,16 @@
         用户：{{ this.currentUser.username }}
       </div>
       <el-button type="primary" round @click="mine(); dialogMineVisible = true">挖矿</el-button>
+      <br>
+      <el-button type="primary" round @click="addKeys(); dialogAddKeysVisible = true">增加密钥对</el-button>
+      <br>
+      <el-button type="primary" round @click="dialogSetDefaultAddressVisible = true">设置默认地址</el-button>
+      <br>
+      <el-button type="primary" round @click="dialogQueryBalanceVisible = true">查询余额</el-button>
+      <br>
+      <el-button type="primary" round @click="dialogTransferAccountVisible = true">给其他用户转账</el-button>
+      <br>
+      <el-button type="danger" round @click="logout">退出登录</el-button>
       <el-dialog title="提示" :visible.sync="dialogMineVisible" width="30%" :before-close="handleClose">
         <span>挖矿中...请稍候</span>
         <span slot="footer" class="dialog-footer">
@@ -24,14 +34,12 @@
         </span>
       </el-dialog>
       <el-dialog title="提示" :visible.sync="dialogMineFinishedVisible" width="30%" :before-close="handleClose">
-        <span>新挖到的区块是：XXX</span>
+        <span>新挖到的区块是：{{ this.newBlockNonce }}</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogMineFinishedVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogMineFinishedVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-      <br>
-      <el-button type="primary" round @click="addKeys(); dialogAddKeysVisible = true">增加密钥对</el-button>
       <el-dialog title="提示" :visible.sync="dialogAddKeysVisible" width="30%" :before-close="handleClose">
         <span>增加的公钥是：{{ newPublicKey }}</span>
         <span slot="footer" class="dialog-footer">
@@ -39,8 +47,6 @@
           <el-button type="primary" @click="dialogAddKeysVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-      <br>
-      <el-button type="primary" round @click="dialogQueryBalanceVisible = true">查询余额</el-button>
       <el-dialog title="提示" :visible.sync="dialogQueryBalanceVisible" width="30%" :before-close="handleClose">
         <span>你的账户余额为{{ balance }}比特币</span>
         <span slot="footer" class="dialog-footer">
@@ -48,11 +54,9 @@
           <el-button type="primary" @click="dialogQueryBalanceVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-      <br>
-      <el-button type="primary" round @click="dialogTransferAccountVisible = true">给其他用户转账</el-button>
       <el-dialog title="提示" :visible.sync="dialogTransferAccountVisible" width="40%" :before-close="handleClose">
         <el-form :model="transferAccountForm" ref="transferAccountForm" label-width="100px"
-                 class="demo-dynamic" :inline="true">
+                 class="demo-dynamic" :inline="true" @keyup.native.enter="transferAccount('transferAccountForm')">
           <el-row type="flex" class="row-bg">
             <el-col>
               <el-form-item v-for="(item, index) in transferAccountForm.items"
@@ -84,8 +88,14 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-      <br>
-      <el-button type="danger" round @click="logout">退出登录</el-button>
+      <el-dialog title="提示" :visible.sync="dialogSetDefaultAddressVisible" width="30%" :before-close="handleClose">
+        <el-input v-model.number="defaultAddressIndexNumber" placeholder="输入地址索引"
+                  @keyup.native.enter="setDefaultAddress"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogMineVisible = false">取 消</el-button>
+          <el-button type="primary" @click="setDefaultAddress">确 定</el-button>
+        </span>
+      </el-dialog>
     </el-main>
     <el-aside width="120px"></el-aside>
   </el-container>
@@ -93,7 +103,14 @@
 
 <script>
 import globalDefault from '../../Global'
-import {queryAllUsersReq, queryBalanceReq, mineReq, addKeysReq, transferAccountReq} from '../../api/user'
+import {
+  queryAllUsersReq,
+  queryBalanceReq,
+  mineReq,
+  addKeysReq,
+  transferAccountReq,
+  setDefaultAddressReq
+} from '../../api/user'
 
 export default {
   data () {
@@ -101,6 +118,7 @@ export default {
       currentUser: {},
       usernames: [],
       newPublicKey: '',
+      newBlockNonce: '',
       balance: -1,
       transferAccountForm: {
         items: [{
@@ -108,11 +126,13 @@ export default {
           money: ''
         }]
       },
+      defaultAddressIndexNumber: '',
       dialogMineVisible: false,
       dialogMineFinishedVisible: false,
       dialogAddKeysVisible: false,
       dialogQueryBalanceVisible: false,
-      dialogTransferAccountVisible: false
+      dialogTransferAccountVisible: false,
+      dialogSetDefaultAddressVisible: false
     }
   },
   methods: {
@@ -158,8 +178,9 @@ export default {
       mineReq(this.currentUser.username).then((res) => {
         this.dialogMineVisible = false
         this.dialogMineFinishedVisible = true
-        console.log(res)
+        console.log(res.data.data)
         // TODO
+        this.newBlockNonce = res.data.data
       })
     },
     addKeys () {
@@ -208,6 +229,20 @@ export default {
             this.dialogTransferAccountVisible = false
             this.$Message.success('转账成功')
           })
+        }
+      })
+    },
+    setDefaultAddress () {
+      if (Math.round(this.defaultAddressIndexNumber) !== this.defaultAddressIndexNumber) {
+        this.$Message.error('请输入整数')
+        return
+      }
+      setDefaultAddressReq(this.currentUser.username, this.defaultAddressIndexNumber).then((res) => {
+        if (res.data.isSuccess) {
+          this.$Message.success('设置成功')
+          this.dialogSetDefaultAddressVisible = false
+        } else {
+          this.$Message.error('请输入正确范围的索引')
         }
       })
     }
