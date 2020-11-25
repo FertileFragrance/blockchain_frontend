@@ -50,5 +50,5 @@ export function setDefaultAddressReq (username, indexNumber) {
 }
 
 export function queryKeyNumberReq (username) {
-  return request.get('/queryKeyNumber' + '?' + 'username=' + username)
+  return request.get('/queryKeyNumbers' + '?' + 'username=' + username)
 }

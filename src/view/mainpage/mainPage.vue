@@ -30,12 +30,16 @@
       <br>
       <br>
       <span>
-        <el-button type="primary" round @click="queryKeyNumbers(); dialogQueryKeyNumbersVisible = true">查询密钥对数量</el-button>
+        <el-button type="primary" round
+                   @click="queryKeyNumbers(); dialogQueryKeyNumbersVisible = true">查询密钥对数量</el-button>
         <el-button type="primary" round @click="dialogTransferAccountVisible = true">给其他用户转账</el-button>
       </span>
       <br>
       <br>
       <el-button type="danger" round @click="logout">退出登录</el-button>
+      <br>
+      <br>
+      <img src="../../assets/edu.jpeg" alt="sorry~ the picture is not found" @click="gotoEduSystem">
       <el-dialog title="提示" :visible.sync="dialogMineVisible" width="30%" :before-close="handleClose">
         <span>挖矿中...请稍候</span>
         <span slot="footer" class="dialog-footer">
@@ -87,7 +91,13 @@
                             :key="item.key" :prop="'items.' + index + '.money'"
                             :rules="[{required: true, message: '金额不能为空', trigger: 'blur'},
                             {type: 'number', message: '请输入数字', trigger: 'blur'}]">
-                <el-input v-model.number="item.money" placeholder="输入金额"></el-input>
+                <el-input v-model="item.money" placeholder="输入金额" @input="(val) => {
+                  item.money = val
+                .replace(/[^0-9.]/g, '')
+                .replace('.', '#*')
+                .replace(/\./g, '')
+                .replace('#*', '.');
+                }"></el-input>
               </el-form-item>
             </el-col>
             <el-col>
@@ -183,6 +193,9 @@ export default {
     gotoLogin () {
       this.$router.push('/login')
     },
+    gotoEduSystem () {
+      this.$router.push('/firstPage')
+    },
     logout () {
       globalDefault.user.username = ''
       globalDefault.user.password = ''
@@ -240,7 +253,6 @@ export default {
             return
           }
           transferAccountReq(this.currentUser.username, recipientNames, moneys).then((res) => {
-            // TODO
             console.log(res)
             if (res.data.isSuccess) {
               this.queryBalance()

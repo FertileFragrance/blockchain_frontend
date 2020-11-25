@@ -4,6 +4,7 @@ import homePage from '../view/login/homePage'
 import login from '../view/login/login'
 import register from '../view/login/register'
 import mainPage from '../view/mainpage/mainPage'
+import firstPage from '../view/edusystem/firstPage'
 
 Vue.use(Router)
 
@@ -24,6 +25,10 @@ export default new Router({
     {
       path: '/mainPage',
       component: mainPage
+    },
+    {
+      path: '/firstPage',
+      component: firstPage
     }
   ]
 })
