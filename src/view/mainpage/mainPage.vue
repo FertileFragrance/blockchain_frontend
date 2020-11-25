@@ -15,15 +15,25 @@
         <Avatar icon="ios-person" size="large" style="background-color: #87d068"/>
         用户：{{ this.currentUser.username }}
       </div>
-      <el-button type="primary" round @click="mine(); dialogMineVisible = true">挖矿</el-button>
+      <span>
+        <el-button type="primary" round @click="addKeys(); dialogAddKeysVisible = true">增加密钥对</el-button>
+        <el-button type="primary" round @click="dialogSetDefaultAddressVisible = true">设置默认地址</el-button>
+      </span>
       <br>
-      <el-button type="primary" round @click="addKeys(); dialogAddKeysVisible = true">增加密钥对</el-button>
       <br>
-      <el-button type="primary" round @click="dialogSetDefaultAddressVisible = true">设置默认地址</el-button>
       <br>
-      <el-button type="primary" round @click="queryBalance(); dialogQueryBalanceVisible = true">查询余额</el-button>
+      <span>
+        <el-button type="primary" round @click="mine(); dialogMineVisible = true">挖矿</el-button>
+        <el-button type="primary" round @click="queryBalance(); dialogQueryBalanceVisible = true">查询余额</el-button>
+      </span>
       <br>
-      <el-button type="primary" round @click="dialogTransferAccountVisible = true">给其他用户转账</el-button>
+      <br>
+      <br>
+      <span>
+        <el-button type="primary" round @click="queryKeyNumbers(); dialogQueryKeyNumbersVisible = true">查询密钥对数量</el-button>
+        <el-button type="primary" round @click="dialogTransferAccountVisible = true">给其他用户转账</el-button>
+      </span>
+      <br>
       <br>
       <el-button type="danger" round @click="logout">退出登录</el-button>
       <el-dialog title="提示" :visible.sync="dialogMineVisible" width="30%" :before-close="handleClose">
@@ -38,6 +48,13 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogMineFinishedVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogMineFinishedVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="提示" :visible.sync="dialogQueryKeyNumbersVisible" width="30%" :before-close="handleClose">
+        <span>你的密钥有{{ keyNumber }}对</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogQueryKeyNumbersVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogQueryKeyNumbersVisible = false">确 定</el-button>
         </span>
       </el-dialog>
       <el-dialog title="提示" :visible.sync="dialogAddKeysVisible" width="30%" :before-close="handleClose">
@@ -109,7 +126,8 @@ import {
   mineReq,
   addKeysReq,
   transferAccountReq,
-  setDefaultAddressReq
+  setDefaultAddressReq,
+  queryKeyNumberReq
 } from '../../api/user'
 
 export default {
@@ -120,6 +138,7 @@ export default {
       newPublicKey: '',
       newBlockNonce: '',
       balance: -1,
+      keyNumber: -1,
       transferAccountForm: {
         items: [{
           recipientName: '',
@@ -129,6 +148,7 @@ export default {
       defaultAddressIndexNumber: '',
       dialogMineVisible: false,
       dialogMineFinishedVisible: false,
+      dialogQueryKeyNumbersVisible: false,
       dialogAddKeysVisible: false,
       dialogQueryBalanceVisible: false,
       dialogTransferAccountVisible: false,
@@ -222,10 +242,15 @@ export default {
           transferAccountReq(this.currentUser.username, recipientNames, moneys).then((res) => {
             // TODO
             console.log(res)
-            this.queryBalance()
-            this.resetForm(name)
-            this.dialogTransferAccountVisible = false
-            this.$Message.success('转账成功')
+            if (res.data.isSuccess) {
+              this.queryBalance()
+              this.resetForm(name)
+              this.dialogTransferAccountVisible = false
+              this.$Message.success('转账成功')
+            } else {
+              this.$Message.error('非法的用户！')
+              this.logout()
+            }
           })
         }
       })
@@ -242,6 +267,11 @@ export default {
         } else {
           this.$Message.error('请输入正确范围的索引')
         }
+      })
+    },
+    queryKeyNumbers () {
+      queryKeyNumberReq(globalDefault.user.username).then((res) => {
+        this.keyNumber = res.data.data
       })
     }
   },
@@ -260,6 +290,7 @@ export default {
       }
     })
     this.queryBalance()
+    this.queryKeyNumbers()
   }
 }
 </script>

@@ -39,7 +39,7 @@ export function transferAccountReq (senderName, recipientNames, moneys) {
     senderName: senderName,
     recipientNames: recipientNames,
     moneys: moneys
-  })
+  }, {timeout: 1000 * 60 * 60})
 }
 
 export function setDefaultAddressReq (username, indexNumber) {
@@ -47,4 +47,8 @@ export function setDefaultAddressReq (username, indexNumber) {
     username: username,
     indexNumber: indexNumber
   })
+}
+
+export function queryKeyNumberReq (username) {
+  return request.get('/queryKeyNumber' + '?' + 'username=' + username)
 }
